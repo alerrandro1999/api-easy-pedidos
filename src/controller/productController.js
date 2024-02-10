@@ -2,9 +2,9 @@ const Firebird = require("node-firebird");
 
 exports.getProducts = async (req, res) => {
   var options = {};
-  options.host = "localhost";
+  options.host = "192.168.1.20";
   options.port = 3050;
-  options.database = "C:\\banco\\EASY.FDB";
+  options.database = "C:\\banco\\easy.VCI";
   options.user = "sysdba";
   options.password = "masterkey";
   options.lowercase_keys = false;
@@ -19,11 +19,11 @@ exports.getProducts = async (req, res) => {
     if (err) {
       return res.status(200).json(err);
     }
-    const query = "SELECT * FROM PRODUTOS";
+    const query = "SELECT COD_PRODUTO AS ID, PRODUTO AS NOME FROM PRODUTOS";
 
-    const params = [cpf];
+    // const params = [cpf];
 
-    db.query(query, params, function (err, result) {
+    db.query(query, function (err, result) {
       db.detach();
 
       if (!result || result.length === 0) {
