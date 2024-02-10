@@ -1,6 +1,10 @@
 const Firebird = require("node-firebird");
 
 exports.getProducts = async (req, res) => {
+  const { cod_entidade } = req.body;
+
+  console.log(cod_entidade);
+
   var options = {};
   options.host = "192.168.1.20";
   options.port = 3050;
@@ -19,19 +23,20 @@ exports.getProducts = async (req, res) => {
     if (err) {
       return res.status(200).json(err);
     }
-    const query = "SELECT COD_PRODUTO AS ID, PRODUTO AS NOME FROM PRODUTOS";
+    const query =
+      "SELECT COD_PRODUTO AS ID, PRODUTO AS NOME FROM PRODUTOS WHERE COD_ENTIDADE = ?";
 
-    // const params = [cpf];
+    const params = [cod_entidade];
 
-    db.query(query, function (err, result) {
+    db.query(query, params, function (err, result) {
       db.detach();
 
       if (!result || result.length === 0) {
-        return res.status(250).json({ msg: "Usuário não encontrado" });
+        return res.status(250).json({ msg: "Produto não encontrado" });
       }
 
       if (err) {
-        return res.status(250).json({ msg: "Usuário não encontrado" });
+        return res.status(250).json({ msg: "Produto não encontrado" });
       } else {
         console.log(result);
         return res.status(200).json({ result });
