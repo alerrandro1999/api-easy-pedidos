@@ -14,5 +14,6 @@ app.post("/api/v1", (req, res) => {
 
 app.post("/api/v1/auth/login", loginController.authLogin);
 app.post("/api/v1/products", productController.getProducts);
+app.post("/api/v1/insert-product", productController.insertProducts);
 
 app.listen(3000);

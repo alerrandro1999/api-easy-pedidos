@@ -61,7 +61,6 @@ exports.authLogin = async (req, res) => {
       if (err) {
         return res.status(250).json({ msg: "Usuário não encontrado" });
       } else {
-        console.log(result);
         const secret = process.env.SECRET;
         const token = jwt.sign(
           {
