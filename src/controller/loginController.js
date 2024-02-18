@@ -1,38 +1,16 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-
-exports.login = async (req, res) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-
-  if (!token) {
-    return res.status(401).json({ msg: "acesso negado" });
-  }
-
-  try {
-    const secret = process.env.SECRET;
-    decode = jwt.verify(token, secret);
-    res.status(200).json({
-      user: decode,
-      token: token,
-    });
-  } catch (error) {
-    res.status(400).json({ msg: "Token inválido" });
-  }
-};
-
 const Firebird = require("node-firebird");
 
 exports.authLogin = async (req, res) => {
   const { celular } = req.body;
 
-  /////////////////////////////////////////////////////////////////////////////////
   var options = {};
-  options.host = "192.168.1.20";
-  options.port = 3050;
-  options.database = "C:\\banco\\easy.VCI";
-  options.user = "sysdba";
-  options.password = "masterkey";
+  options.host = process.env.HOST;
+  options.port = process.env.PORT;
+  options.database = process.env.DATABASE;
+  options.user = process.env.USER;
+  options.password = process.env.PASSWORD;
   options.lowercase_keys = false;
   options.role = null;
   options.pageSize = 4096;

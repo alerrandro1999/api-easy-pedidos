@@ -3,11 +3,11 @@ const Firebird = require("node-firebird");
 exports.getProducts = async (req, res) => {
   const { cod_entidade } = req.body;
   var options = {};
-  options.host = "192.168.1.20";
-  options.port = 3050;
-  options.database = "C:\\banco\\easy.VCI";
-  options.user = "sysdba";
-  options.password = "masterkey";
+  options.host = process.env.HOST;
+  options.port = process.env.PORT;
+  options.database = process.env.DATABASE;
+  options.user = process.env.USER;
+  options.password = process.env.PASSWORD;
   options.lowercase_keys = false;
   options.role = null;
   options.pageSize = 4096;
@@ -52,11 +52,11 @@ exports.insertProducts = async (req, res) => {
     }
 
     const options = {
-      host: "192.168.1.20",
-      port: 3050,
-      database: "C:\\banco\\easy.VCI",
-      user: "sysdba",
-      password: "masterkey",
+      host: process.env.HOST,
+      port: process.env.PORT,
+      database: process.env.DATABASE,
+      user: process.env.USER,
+      password: process.env.PASSWORD,
       lowercase_keys: false,
       role: null,
       pageSize: 4096,
