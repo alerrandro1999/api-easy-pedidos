@@ -3,11 +3,11 @@ const Firebird = require("node-firebird");
 exports.getProducts = async (req, res) => {
   const { cod_entidade } = req.body;
   var options = {};
-  options.host = "89.213.142.202";
-  options.port = "3050";
-  options.database = "C:\\Dev\\Delphi\\Banco\\VCI.Vci";
-  options.user = "sysdba";
-  options.password = "ciecmaster";
+  options.host = process.env.HOST;
+  options.port = process.env.PORT;
+  options.database = process.env.DATABASE;
+  options.user = process.env.USER;
+  options.password = process.env.PASSWORD;
   options.lowercase_keys = false;
   options.role = null;
   options.pageSize = 4096;
@@ -44,26 +44,26 @@ exports.getProducts = async (req, res) => {
 exports.insertProducts = async (req, res) => {
   try {
     const data = req.body;
-
+    console.log(data);
     if (!data || !Array.isArray(data)) {
       return res
         .status(400)
         .json({ error: "Dados inválidos ou ausentes no corpo da requisição." });
     }
 
-    const options = {
-      host: "89.213.142.202",
-      port: "3050",
-      database: "C:\\Dev\\Delphi\\Banco\\VCI.Vci",
-      user: "sysdba",
-      password: "ciecmaster",
-      lowercase_keys: false,
-      role: null,
-      pageSize: 4096,
-      retryConnectionInterval: 1000,
-      blobAsText: false,
-      encoding: "UTF-8",
-    };
+    var options = {};
+    options.host = process.env.HOST;
+    options.port = process.env.PORT;
+    options.database = process.env.DATABASE;
+    options.user = process.env.USER;
+    options.password = process.env.PASSWORD;
+    options.lowercase_keys = false;
+    options.role = null;
+    options.pageSize = 4096;
+    options.pageSize = 4096;
+    options.retryConnectionInterval = 1000;
+    options.blobAsText = false;
+    options.encoding = "UTF-8";
 
     // Conectar ao banco de dados Firebird
     const db = await new Promise((resolve, reject) => {
