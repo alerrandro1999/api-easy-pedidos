@@ -21,7 +21,7 @@ exports.authLogin = async (req, res) => {
 
   Firebird.attach(options, function (err, db) {
     if (err) {
-      return res.status(200).json(err);
+      return res.status(404).json(err);
     }
 
     const query =
