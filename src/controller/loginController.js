@@ -6,11 +6,11 @@ exports.authLogin = async (req, res) => {
   const { celular } = req.body;
 
   var options = {};
-  options.host = process.env.HOST;
-  options.port = process.env.PORT;
-  options.database = process.env.DATABASE;
-  options.user = process.env.USER;
-  options.password = process.env.PASSWORD;
+  options.host = "89.213.142.202";
+  options.port = "3050";
+  options.database = "C:\\Dev\\Delphi\\Banco\\VCI.Vci";
+  options.user = "sysdba";
+  options.password = "ciecmaster";
   options.lowercase_keys = false;
   options.role = null;
   options.pageSize = 4096;

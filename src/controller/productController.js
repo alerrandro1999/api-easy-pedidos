@@ -5,11 +5,11 @@ const Firebird = require("node-firebird");
 exports.getProducts = async (req, res) => {
   const { cod_entidade } = req.body;
   var options = {};
-  options.host = process.env.HOST;
-  options.port = process.env.PORT;
-  options.database = process.env.DATABASE;
-  options.user = process.env.USER;
-  options.password = process.env.PASSWORD;
+  options.host = "89.213.142.202";
+  options.port = "3050";
+  options.database = "C:\\Dev\\Delphi\\Banco\\VCI.Vci";
+  options.user = "sysdba";
+  options.password = "ciecmaster";
   options.lowercase_keys = false;
   options.role = null;
   options.pageSize = 4096;
@@ -54,11 +54,11 @@ exports.insertProducts = async (req, res) => {
     }
 
     var options = {};
-    options.host = process.env.HOST;
-    options.port = process.env.PORT;
-    options.database = process.env.DATABASE;
-    options.user = process.env.USER;
-    options.password = process.env.PASSWORD;
+    options.host = "89.213.142.202";
+    options.port = "3050";
+    options.database = "C:\\Dev\\Delphi\\Banco\\VCI.Vci";
+    options.user = "sysdba";
+    options.password = "ciecmaster";
     options.lowercase_keys = false;
     options.role = null;
     options.pageSize = 4096;
@@ -66,6 +66,8 @@ exports.insertProducts = async (req, res) => {
     options.retryConnectionInterval = 1000;
     options.blobAsText = false;
     options.encoding = "UTF-8";
+
+    console.log(options);
 
     // Conectar ao banco de dados Firebird
     const db = await new Promise((resolve, reject) => {
@@ -115,7 +117,7 @@ exports.insertProducts = async (req, res) => {
     for (const item of data) {
       // Query para inserir na tabela PREVENDA
       const prevendaQuery =
-        "UPDATE OR INSERT INTO PREVENDA (COD_FILIAL, CODIGO, CODPREVENDA, COD_VENDEDOR, SITUACAO, DATA_EMISSAO, DATA_ENTREGA, COD_TRANSACAO, TOTAL_PRODUTOS, VALOR_FRETE, OUTRAS_DESPESAS, VALOR_IPI, DESCONTO, VALOR_ICMS, BASE_ICMS, PORC_ICMS, VALOR_SEGURO, VALOR_ICMSST, BASE_ICMSST, TOTAL_FINAL, VALOR_PIS, VALOR_COFINS, VALOR_FINANCEIRA, TOTAL_SERVICO, IDENTIFICACAO) VALUES (?, ?, ?, ?, 'N', CURRENT_DATE, CURRENT_DATE, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)";
+        "UPDATE OR INSERT INTO PREVENDA (COD_FILIAL, CODIGO, CODPREVENDA, COD_VENDEDOR, SITUACAO, DATA_EMISSAO, DATA_ENTREGA, COD_TRANSACAO, TOTAL_PRODUTOS, VALOR_FRETE, OUTRAS_DESPESAS, VALOR_IPI, DESCONTO, VALOR_ICMS, BASE_ICMS, PORC_ICMS, VALOR_SEGURO, VALOR_ICMSST, BASE_ICMSST, TOTAL_FINAL, VALOR_PIS, VALOR_COFINS, VALOR_FINANCEIRA) VALUES (?, ?, ?, ?, 'N', CURRENT_DATE, CURRENT_DATE, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)";
 
       // Parâmetros a serem passados na query
       const paramsPrevenda = [
