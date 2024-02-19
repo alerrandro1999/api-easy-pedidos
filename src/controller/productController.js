@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const Firebird = require("node-firebird");
 
 exports.getProducts = async (req, res) => {
@@ -107,6 +109,8 @@ exports.insertProducts = async (req, res) => {
 
     const codprevenda = resultGenId[0].GENERATED_ID;
 
+    console.log("cod prevenda" + " " + codprevenda);
+
     // Iterar sobre os dados recebidos
     for (const item of data) {
       // Query para inserir na tabela PREVENDA
@@ -121,6 +125,8 @@ exports.insertProducts = async (req, res) => {
         item.CODIGO,
       ];
 
+      console.log("resultado prevenda" + " " + paramsPrevenda);
+
       // Executar a query para PREVENDA
       const resultPrevenda = await new Promise((resolve, reject) => {
         db.query(prevendaQuery, paramsPrevenda, (err, result) => {
@@ -132,12 +138,18 @@ exports.insertProducts = async (req, res) => {
         });
       });
 
+      console.log("resultado prevenda" + " " + resultPrevenda);
+
       // Query para obter o próximo valor para ITEM dentro de uma venda
       const itemQuery =
         "SELECT COALESCE(MAX(ITEM), 0) + 1 AS NEXT_ITEM FROM PREITENS WHERE COD_FILIAL = ? AND CODPREVENDA = ?";
 
       // Parâmetros a serem passados na query
       const paramsItem = [item.COD_FILIAL, codprevenda];
+
+      console.log("parans itens" + " " + paramsItem);
+
+      // console.log(paramsItem);
 
       // Obter o próximo valor para ITEM
       const resultItem = await new Promise((resolve, reject) => {
