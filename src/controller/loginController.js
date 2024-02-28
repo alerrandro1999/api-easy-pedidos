@@ -25,9 +25,9 @@ exports.authLogin = async (req, res) => {
     }
 
     const query =
-      "SELECT FIRST 1 cad.CODIGO, cad.NOME, cad.COD_ENTIDADE FROM CADASTRO as cad WHERE cad.CELULAR = ?";
+      "SELECT cad.CODIGO, cad.NOME, cad.COD_ENTIDADE FROM CADASTRO as cad WHERE cad.CELULAR = ?";
 
-    const params = [celular];
+    const params = celular.replace(/\s/g, "");
 
     db.query(query, params, function (err, result) {
       db.detach();

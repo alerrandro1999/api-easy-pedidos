@@ -67,8 +67,6 @@ exports.insertProducts = async (req, res) => {
     options.blobAsText = false;
     options.encoding = "UTF-8";
 
-    console.log(options);
-
     // Conectar ao banco de dados Firebird
     const db = await new Promise((resolve, reject) => {
       Firebird.attach(options, (err, db) => {
@@ -111,8 +109,6 @@ exports.insertProducts = async (req, res) => {
 
     const codprevenda = resultGenId[0].GENERATED_ID;
 
-    console.log("cod prevenda" + " " + codprevenda);
-
     // Iterar sobre os dados recebidos
     for (const item of data) {
       // Query para inserir na tabela PREVENDA
@@ -140,18 +136,12 @@ exports.insertProducts = async (req, res) => {
         });
       });
 
-      console.log("resultado prevenda" + " " + resultPrevenda);
-
       // Query para obter o próximo valor para ITEM dentro de uma venda
       const itemQuery =
         "SELECT COALESCE(MAX(ITEM), 0) + 1 AS NEXT_ITEM FROM PREITENS WHERE COD_FILIAL = ? AND CODPREVENDA = ?";
 
       // Parâmetros a serem passados na query
       const paramsItem = [item.COD_FILIAL, codprevenda];
-
-      console.log("parans itens" + " " + paramsItem);
-
-      // console.log(paramsItem);
 
       // Obter o próximo valor para ITEM
       const resultItem = await new Promise((resolve, reject) => {
