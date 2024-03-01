@@ -46,7 +46,6 @@ exports.getProducts = async (req, res) => {
 exports.insertProducts = async (req, res) => {
   try {
     const data = req.body;
-    console.log(data);
     if (!data || !Array.isArray(data)) {
       return res
         .status(400)
