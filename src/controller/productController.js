@@ -67,7 +67,6 @@ exports.insertProducts = async (req, res) => {
     options.blobAsText = false;
     options.encoding = "UTF-8";
 
-    // Conectar ao banco de dados Firebird
     const db = await new Promise((resolve, reject) => {
       Firebird.attach(options, (err, db) => {
         if (err) {
@@ -78,7 +77,6 @@ exports.insertProducts = async (req, res) => {
       });
     });
 
-    // Iniciar uma transação para garantir consistência
     await new Promise((resolve, reject) => {
       db.startTransaction((err) => {
         if (err) {
@@ -89,7 +87,6 @@ exports.insertProducts = async (req, res) => {
       });
     });
 
-    // Obter o próximo valor de GEN_ID para codprevenda
     const genIdQuery =
       "SELECT GEN_ID(GEN_TRANSACAO_PREVENDA, 1) AS GENERATED_ID FROM RDB$DATABASE";
 
@@ -109,13 +106,10 @@ exports.insertProducts = async (req, res) => {
 
     const codprevenda = resultGenId[0].GENERATED_ID;
 
-    // Iterar sobre os dados recebidos
     for (const item of data) {
-      // Query para inserir na tabela PREVENDA
       const prevendaQuery =
         "UPDATE OR INSERT INTO PREVENDA (COD_FILIAL, CODIGO, CODPREVENDA, COD_VENDEDOR, SITUACAO, DATA_EMISSAO, DATA_ENTREGA, COD_TRANSACAO, TOTAL_PRODUTOS, VALOR_FRETE, OUTRAS_DESPESAS, VALOR_IPI, DESCONTO, VALOR_ICMS, BASE_ICMS, PORC_ICMS, VALOR_SEGURO, VALOR_ICMSST, BASE_ICMSST, TOTAL_FINAL, VALOR_PIS, VALOR_COFINS, VALOR_FINANCEIRA) VALUES (?, ?, ?, ?, 'N', CURRENT_DATE, CURRENT_DATE, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)";
 
-      // Parâmetros a serem passados na query
       const paramsPrevenda = [
         item.COD_FILIAL,
         item.CODIGO,
@@ -123,9 +117,6 @@ exports.insertProducts = async (req, res) => {
         item.CODIGO,
       ];
 
-      console.log("resultado prevenda" + " " + paramsPrevenda);
-
-      // Executar a query para PREVENDA
       const resultPrevenda = await new Promise((resolve, reject) => {
         db.query(prevendaQuery, paramsPrevenda, (err, result) => {
           if (err) {
@@ -136,14 +127,11 @@ exports.insertProducts = async (req, res) => {
         });
       });
 
-      // Query para obter o próximo valor para ITEM dentro de uma venda
       const itemQuery =
         "SELECT COALESCE(MAX(ITEM), 0) + 1 AS NEXT_ITEM FROM PREITENS WHERE COD_FILIAL = ? AND CODPREVENDA = ?";
 
-      // Parâmetros a serem passados na query
       const paramsItem = [item.COD_FILIAL, codprevenda];
 
-      // Obter o próximo valor para ITEM
       const resultItem = await new Promise((resolve, reject) => {
         db.query(itemQuery, paramsItem, (err, result) => {
           if (err) {
@@ -160,11 +148,9 @@ exports.insertProducts = async (req, res) => {
 
       const nextItem = resultItem[0].NEXT_ITEM;
 
-      // Query para inserir na tabela PREITENS
       const preitensQuery =
         "UPDATE OR INSERT INTO PREITENS (COD_FILIAL, CODPREVENDA, ITEM, COD_PRODUTO, COD_VENDEDOR, QUANTIDADE, PRODUTO, PRECO_CUSTO, VALOR_TOTAL, PRECO_VENDA, PRECO_FINAL, ORIGEM, MODALIDADE_ICMS, CFOP, CST_ICMS, BASE_ICMS, RED_BASE_ICMS, PORC_ICMS, VALOR_ICMS, MODALIDADE_ICMSST, BASE_ICMSST, RED_BASE_ICMSST, PORC_MVA, PORC_ICMSST, VALOR_ICMSST, CST_IPI, VALOR_IPI, PORC_IPI, CST_PIS, VALOR_PIS, PORC_PIS, CST_COFINS, VALOR_COFINS, PORC_COFINS, PRECO_DESCONTO) VALUES(?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)";
 
-      // Parâmetros a serem passados na query
       const paramsPreitens = [
         item.COD_FILIAL,
         codprevenda,
@@ -175,7 +161,6 @@ exports.insertProducts = async (req, res) => {
         item.PRODUTO,
       ];
 
-      // Executar a query para PREITENS
       await new Promise((resolve, reject) => {
         db.query(preitensQuery, paramsPreitens, (err) => {
           if (err) {
@@ -196,7 +181,6 @@ exports.insertProducts = async (req, res) => {
         }
       });
     });
-    // Desconectar do banco de dados após processar todos os dados
     db.detach();
 
     return res.status(200).json({ msg: "Pedido realizado com sucesso" });
