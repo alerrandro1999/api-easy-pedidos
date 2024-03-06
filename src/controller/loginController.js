@@ -6,11 +6,16 @@ exports.authLogin = async (req, res) => {
   const { celular } = req.body;
 
   var options = {};
+  // options.host = "192.168.1.8";
+  // options.port = "3050";
+  // options.database = "C:\\banco\\easy.VCI";
   options.host = "89.213.142.202";
   options.port = "3050";
   options.database = "C:\\Dev\\Delphi\\Banco\\VCI.Vci";
   options.user = "sysdba";
   options.password = "ciecmaster";
+  // options.password = "masterkey";
+
   options.lowercase_keys = false;
   options.role = null;
   options.pageSize = 4096;
@@ -27,9 +32,7 @@ exports.authLogin = async (req, res) => {
     const query =
       "SELECT cad.CODIGO, cad.NOME, cad.COD_ENTIDADE FROM CADASTRO as cad WHERE cad.CELULAR = ?";
 
-    const params = celular.replace(/\s/g, "");
-
-    db.query(query, params, function (err, result) {
+    db.query(query, celular, function (err, result) {
       db.detach();
 
       if (!result || result.length === 0) {
