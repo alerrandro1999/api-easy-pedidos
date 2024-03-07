@@ -6,8 +6,7 @@ exports.authLogin = async (req, res) => {
   const { celular } = req.body;
 
   var options = {};
-  // options.host = "192.168.1.8";
-  // options.port = "3050";
+  // options.host = "192.168.1.12";
   // options.database = "C:\\banco\\easy.VCI";
   options.host = "89.213.142.202";
   options.port = "3050";
